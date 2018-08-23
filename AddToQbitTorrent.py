@@ -134,7 +134,7 @@ def descargar_archivos(bot, update):
 			matches = re.finditer(regex, test_str)
 			for lista in matches:	
 				call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(lista.group(1))])
-			bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los capítulos de <b>"+filename+"</b> a qbittorrent", parse_mode="HTML") 
+			bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets de <b>"+filename+"</b> a qbittorrent", parse_mode="HTML") 
 	except:
 		pass
 
