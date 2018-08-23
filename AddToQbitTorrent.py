@@ -92,7 +92,7 @@ def capturar_texto(bot, update):
 		matches = re.finditer(regex, texto)
 		for magnet in matches:
 			call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(magnet.group(1))+'.torrent'])
-		bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los capítulos a qbittorrent", parse_mode="HTML") 
+		bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets a qbittorrent", parse_mode="HTML") 
 	except:
 		pass
 
