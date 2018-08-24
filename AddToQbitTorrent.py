@@ -124,7 +124,7 @@ def descargar_archivos(bot, update):
 		archivo = bot.getFile(m.document.file_id)	
 		DownloadFile(archivo.file_path, 'tmp_qbt/'+filename)
 
-		if filename.endswith('.torrents'):		
+		if filename.endswith('.torrent'):		
 			call(['qbittorrent-nox', 'tmp_qbt/'+filename])
 			bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido al qbittorrent con exito", parse_mode="HTML") 
 
