@@ -20,20 +20,25 @@ bot.
 # Código creado por https://telegram.me/alfiles #
 #################################################
 
+#------------------------------------------------
+# Librerías necesarias                          #
+#------------------------------------------------
+# pip3 install telegram --upgrade -y
+# pip3 install python-telegram-bot --upgrade -y
 
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler, InlineQueryHandler, CallbackQueryHandler)
 from telegram import (InlineQueryResultArticle, ParseMode, InputTextMessageContent, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup)
 import telegram
 import logging
-#----------------------------------------------
+#------------------------------------------------
 # Libería para ejectar comandos de linux en 
 # python 🔽
-#----------------------------------------------
+#------------------------------------------------
 from subprocess import call
-#----------------------------------------------
+#------------------------------------------------
 # Libería para usar las expresiones regulares
 # (regex) 🔽
-#----------------------------------------------
+#------------------------------------------------
 import re 
 
 # Enable logging
@@ -44,10 +49,10 @@ logger = logging.getLogger(__name__)
 
 
 
-#----------------------------------------------
+#------------------------------------------------
 # Función para descargarse un archivo de 
 # internet
-#----------------------------------------------
+#------------------------------------------------
 def DownloadFile(url, filename):
 	try:
 		# local_filename = url.split('/')[-1]
@@ -60,10 +65,10 @@ def DownloadFile(url, filename):
 		print (e) 
 
 
-#----------------------------------------------
+#------------------------------------------------
 # Función para borrar todos los archivos de un
 # directorio
-#----------------------------------------------
+#------------------------------------------------
 def delete_files(folder):
     import os, shutil   
     for the_file in os.listdir(folder):
@@ -75,13 +80,13 @@ def delete_files(folder):
         except Exception as e:
             print(e)		
 
-#----------------------------------------------
+#------------------------------------------------
 # Función para capturar el texto que se le 
 # escribe al bot
 #
 # Si contiene magnets los envía y en caso
 # contrario, no hace nada
-#----------------------------------------------
+#------------------------------------------------
 
 def capturar_texto(bot, update):
 	m=update.message
@@ -97,7 +102,7 @@ def capturar_texto(bot, update):
 		pass
 
 
-#----------------------------------------------
+#------------------------------------------------
 # Función para descargar archivos y enviarlos a
 # qbittorrent
 #
@@ -113,7 +118,7 @@ def capturar_texto(bot, update):
 # NOTA: En el ejemplo es necesario crear el
 # directorio 'tmp_qbt/', aunque le puedes poner
 # la ruta que quieras
-#----------------------------------------------
+#------------------------------------------------
 
 def descargar_archivos(bot, update):
 
