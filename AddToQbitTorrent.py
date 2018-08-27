@@ -40,6 +40,10 @@ from subprocess import call
 # (regex) 🔽
 #------------------------------------------------
 import re 
+#------------------------------------------------
+# Libería para borrar un archivo 🔽
+#------------------------------------------------
+from os import remove
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -63,22 +67,6 @@ def DownloadFile(url, filename):
 		urllib.request.urlretrieve(url, './'+filename)
 	except Exception as e:
 		print (e) 
-
-
-#------------------------------------------------
-# Función para borrar todos los archivos de un
-# directorio
-#------------------------------------------------
-def delete_files(folder):
-    import os, shutil   
-    for the_file in os.listdir(folder):
-        file_path = os.path.join(folder, the_file)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path): shutil.rmtree(file_path)
-        except Exception as e:
-            print(e)		
 
 #------------------------------------------------
 # Función para capturar el texto que se le 
@@ -114,28 +102,23 @@ def capturar_texto(bot, update):
 # forma individual
 #
 # Si no es un .torrent o un .txt, no hace nada
-#
-# NOTA: En el ejemplo es necesario crear el
-# directorio 'tmp_qbt/', aunque le puedes poner
-# la ruta que quieras
 #------------------------------------------------
 
 def descargar_archivos(bot, update):
 
 	try:
-		m=update.message
-		# print (m)
+		m=update.message		
 		filename=m.document.file_name	
 		archivo = bot.getFile(m.document.file_id)	
-		DownloadFile(archivo.file_path, 'tmp_qbt/'+filename)
+		DownloadFile(archivo.file_path, filename)
 
 		if filename.endswith('.torrent'):		
-			call(['qbittorrent-nox', 'tmp_qbt/'+filename])
+			call(['qbittorrent-nox', filename])
 			bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido al qbittorrent con exito", parse_mode="HTML") 
 
 		if filename.endswith('.txt'):
 			regex = r"magnet:\?xt=urn:btih:(.+?)&dn=[\w\W]+?.torrent"
-			test_str=open('tmp_qbt/'+filename, 'r').read()
+			test_str=open(filename, 'r').read()
 			matches = re.finditer(regex, test_str)
 			for lista in matches:	
 				call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(lista.group(1))])
@@ -143,7 +126,7 @@ def descargar_archivos(bot, update):
 	except:
 		pass
 
-	delete_files('tmp_qbt/')
+	remove(filename)
 	
 
 def error(bot, update, error):
