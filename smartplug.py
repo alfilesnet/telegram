@@ -32,6 +32,19 @@ bot.
 # https://github.com/GadgetReactor/pyHS100
 #------------------------------------------------
 
+#-----------------------------------------------#
+# ¿Qué hace el bot?                             #
+#-----------------------------------------------#
+
+# 1) Escribiendo el comando /enchufe saldrá el texto:
+#    Dispositivos y abajo el botón con el estado del
+#    enchufe (apagado(sin pulsar)/encendido(pulsado))
+#
+#    Cuando se pulsa en el botón, aparte de apagarse
+#    o encenderse el enchufe, también cambiará el 
+#    emoji para que el usuario sepa cual es el 
+#    estado actual del botón
+
 try:
 	from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler, InlineQueryHandler, CallbackQueryHandler)
 	from telegram import (InlineQueryResultArticle, ParseMode, InputTextMessageContent, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup)
