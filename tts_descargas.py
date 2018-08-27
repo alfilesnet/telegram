@@ -3,18 +3,47 @@
 #
 # Simple Bot to reply to Telegram messages
 # This program is dedicated to the public domain under the CC0 license.
-"""
-This Bot uses the Updater class to handle the bot.
+# """
+# This Bot uses the Updater class to handle the bot.
 
-First, a few handler functions are defined. Then, those functions are passed to
-the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
+# First, a few handler functions are defined. Then, those functions are passed to
+# the Dispatcher and registered at their respective places.
+# Then, the bot is started and runs until we press Ctrl-C on the command line.
 
-Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
-"""
+# Usage:
+# Basic Echobot example, repeats messages.
+# Press Ctrl-C on the command line or send a signal to the process to stop the
+# bot.
+# """
+
+#################################################
+# Código creado por https://telegram.me/alfiles #
+#################################################
+
+#-----------------------------------------------#
+# Librerías necesarias                          #
+#-----------------------------------------------#
+# pip install telegram --upgrade -y
+# pip install python-telegram-bot --upgrade -y
+# pip install gTTS --upgrade
+
+
+#-----------------------------------------------#
+# ¿Qué hace el bot?                             #
+#-----------------------------------------------#
+
+# 1) Escribiendo el comando /audio seguido de un texto
+#    generará un audiomensaje con dicho texto
+#
+# 2) Escribiendo el comando /descargar seguido de una url
+#    descargará el archivo localmente y lo reenviará a 
+#    telegram comprimido en .rar 
+#
+#    Si el tamaño excede de los 45mb. lo partirá en .rar's
+#    de ese tamaño y los enviará. 
+#
+#    Una vez enviados los archivos, borrará los archivos 
+#    locales que haya generado en la carpeta "archivo"
 
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler, InlineQueryHandler, CallbackQueryHandler)
 from telegram import (InlineQueryResultArticle, ParseMode, InputTextMessageContent, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup)
