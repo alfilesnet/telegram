@@ -24,12 +24,12 @@ bot.
 #------------------------------------------------
 # Requisitos
 #------------------------------------------------
-pip install telegram --upgrade
-pip install python-telegram-bot --upgrade
+# pip install telegram --upgrade
+# pip install python-telegram-bot --upgrade
 
-Instalar la librería para poder controlar 
-el enchufe:
-https://github.com/GadgetReactor/pyHS100
+# Instalar la librería para poder controlar 
+# el enchufe:
+# https://github.com/GadgetReactor/pyHS100
 #------------------------------------------------
 
 try:
@@ -47,9 +47,10 @@ try:
 	# (regex) 🔽
 	#----------------------------------------------
 	import re
+	
 	#----------------------------------------------
-  # Función para crear los botones
-  #----------------------------------------------
+  	# Función para crear los botones
+  	#----------------------------------------------
 	def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
 		menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
 		if header_buttons:
@@ -59,8 +60,8 @@ try:
 		return menu
 
 	#----------------------------------------------
-  # Comprueba el estado actual del botón
-  #----------------------------------------------
+  	# Comprueba el estado actual del botón
+  	#----------------------------------------------
 	def estado():
 		try:
 			estado=str(check_output(['pyhs100', '--host', 'IP_DEL_ENCHUFE',  'state']))
@@ -71,8 +72,8 @@ try:
 			return 'OFF'
 
 	#==============================================
-  # Función que muestra el botón
-  #==============================================
+  	# Función que muestra el botón
+  	#==============================================
 	def enchufe(bot, update):
 	    
 		m=update.message
@@ -90,8 +91,8 @@ try:
 		bot.send_message(m.chat.id, 'Dispositivos', parse_mode="HTML", reply_markup=reply_markup) 
 
 	#==============================================
-  # Función que gestiona el botón a través el bot
-  #==============================================
+  	# Función que gestiona el botón a través el bot
+  	#==============================================
 	def button(bot, update):
 		try:
 			contenido=update.callback_query.data            
