@@ -23,8 +23,23 @@ bot.
 #------------------------------------------------
 # Librerías necesarias                          #
 #------------------------------------------------
-# pip3 install telegram --upgrade -y
-# pip3 install python-telegram-bot --upgrade -y
+# pip install telegram --upgrade -y
+# pip install python-telegram-bot --upgrade -y
+# sudo apt install qbittorrent-nox -y
+
+#-----------------------------------------------#
+# ¿Qué hace el bot?                             #
+#-----------------------------------------------#
+
+# 1) Reenviando o arrastrando un .torrent al bot, 
+#    éste lo añadirá al qbittorrent
+#
+# 2) Reenviando o arrastrando un .txt con enlaces
+#    magnets, éste los añadirá al qbittorrent
+#
+# 3) Reenviando o escribiendo un enlace magnet en
+#    el bot, éste lo añadirá al qbittorrnet
+
 
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler, InlineQueryHandler, CallbackQueryHandler)
 from telegram import (InlineQueryResultArticle, ParseMode, InputTextMessageContent, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup)
