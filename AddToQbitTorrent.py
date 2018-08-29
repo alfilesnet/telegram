@@ -39,7 +39,9 @@ bot.
 #
 # 3) Reenviando o escribiendo un enlace magnet en
 #    el bot, éste lo añadirá al qbittorrnet
-
+#
+# 4) Reenviando o escribiendo un enlace .torrent 
+#    en el bot, éste lo añadirá al qbittorrnet
 
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler, InlineQueryHandler, CallbackQueryHandler)
 from telegram import (InlineQueryResultArticle, ParseMode, InputTextMessageContent, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup)
@@ -87,8 +89,8 @@ def DownloadFile(url, filename):
 # Función para capturar el texto que se le 
 # escribe al bot
 #
-# Si contiene magnets los envía y en caso
-# contrario, no hace nada
+# Si contiene magnets/.torrent los envía y en 
+# caso contrario, no hace nada
 #------------------------------------------------
 
 def capturar_texto(bot, update):
@@ -96,13 +98,23 @@ def capturar_texto(bot, update):
 	regex = r"magnet:\?xt=urn:btih:(.+?).torrent"
 	texto = m.text
 
-	try:
-		matches = re.finditer(regex, texto)
-		for magnet in matches:
-			call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(magnet.group(1))+'.torrent'])
-		bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets a qbittorrent", parse_mode="HTML") 
-	except:
-		pass
+	count=0
+
+	if texto.endswith('.torrent') and texto.startswith('http'):
+		call(['qbittorrent-nox', texto])
+		bot.send_message(chat_id=m.chat.id, text="Se ha enviado el magnet a qbittorrent", parse_mode="HTML") 
+	else:
+		try:
+			matches = re.finditer(regex, texto)
+			for magnet in matches:
+				if magnet.group(1)!='':
+					call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(magnet.group(1))+'.torrent'])
+					count+=1
+			if count>0:
+				bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets a qbittorrent", parse_mode="HTML") 
+		except Exception as e:
+			print (e)
+			# pass
 
 
 #------------------------------------------------
@@ -151,7 +163,7 @@ def error(bot, update, error):
 def main():
     # Create the EventHandler and pass it your bot's token.
 
-    updater = Updater("ESCRIBE AQUÍ EL TOKEN DE TU BOT")
+    updater = Updater("ESCRIBE AQUI TU TOKEN")
     dp = updater.dispatcher
     
     dp.add_handler(MessageHandler(Filters.document, descargar_archivos)) 
