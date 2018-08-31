@@ -66,7 +66,7 @@ try:
 		try:
 			m=update.message
 			
-			ruta='/home/usuario/archivos_torrent/' #<--- Debes cambiar esta carpeta por la
+			ruta='/docker/Ubuntu/'                 #<--- Debes cambiar esta carpeta por la
 							       #     carpeta donde quieres que se guarden
 							       #     los archivos torrent
 							       #     Recuerda que debe acabar en /
