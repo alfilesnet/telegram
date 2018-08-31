@@ -74,7 +74,7 @@ try:
 			filename=m.document.file_name	
 			archivo = bot.getFile(m.document.file_id)	
 			if filename.endswith('.torrent'):		
-				DownloadFile(archivo.file_path, ruta+filename)
+				DownloadFile(archivo.file_path, ruta, filename)
 				bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido guardado en la carpeta", parse_mode="HTML") 
 
 		except Exception as e:
