@@ -45,14 +45,14 @@ try:
 	# Función para descargarse un archivo de 
 	# internet
 	#----------------------------------------------
-	def DownloadFile(url, filename):
+	def DownloadFile(url, ruta, filename):
 		try:
 			# local_filename = url.split('/')[-1]
 			import urllib.request
 			opener = urllib.request.build_opener()
 			opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 			urllib.request.install_opener(opener)
-			urllib.request.urlretrieve(url, filename)
+			urllib.request.urlretrieve(url, ruta+filename)
 		except Exception as e:
 			print (e) 
 
