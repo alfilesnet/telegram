@@ -23,8 +23,8 @@ bot.
 #------------------------------------------------
 # Librerías necesarias                          #
 #------------------------------------------------
-# python3 -m pip install telegram --upgrade -y
-# python3 -m pip install python-telegram-bot --upgrade -y
+# python3 -m pip install telegram --upgrade 
+# python3 -m pip install python-telegram-bot --upgrade
 #------------------------------------------------
 
 try:
