@@ -57,7 +57,7 @@ try:
 			print (e) 
 
 	#----------------------------------------------
-	# Función para descargar .torrent y envirlos 
+	# Función para descargar .torrent y enviarlos 
 	# a una carpeta
 	#----------------------------------------------
 
@@ -67,9 +67,9 @@ try:
 			m=update.message
 			
 			ruta='/home/usuario/archivos_torrent/' #<--- Debes cambiar esta carpeta por la
-												                     #     carpeta donde quieres que se guarden
-										                  		   #     los archivos torrent
-											                  	   #     Recuerda que debe acabar en /
+							       #     carpeta donde quieres que se guarden
+							       #     los archivos torrent
+							       #     Recuerda que debe acabar en /
 
 			filename=m.document.file_name	
 			archivo = bot.getFile(m.document.file_id)	
