@@ -66,11 +66,8 @@ try:
 		try:
 			m=update.message
 			
-			ruta='/docker/Ubuntu/'                 #<--- Debes cambiar esta carpeta por la
-							       #     carpeta donde quieres que se guarden
-							       #     los archivos torrent
-							       #     Recuerda que debe acabar en /
-
+			ruta='/docker/Ubuntu/' 
+			
 			filename=m.document.file_name	
 			archivo = bot.getFile(m.document.file_id)	
 			if filename.endswith('.torrent'):		
