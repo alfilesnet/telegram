@@ -31,8 +31,7 @@ try:
 
 	from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler, InlineQueryHandler, CallbackQueryHandler)
 	from telegram import (InlineQueryResultArticle, ParseMode, InputTextMessageContent, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup)
-	import telegram
-	from os import remove
+	import telegram	
 	import logging
 
 	# Enable logging
@@ -76,9 +75,6 @@ try:
 
 		except Exception as e:
 			print (e)
-
-		# remove(filename)
-		
 
 	def error(bot, update, error):
 		logger.warn('Update "%s" caused error "%s"' % (update, error))
