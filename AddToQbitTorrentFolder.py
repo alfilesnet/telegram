@@ -65,7 +65,7 @@ try:
 		try:
 			m=update.message
 			
-			ruta='/docker/Ubuntu/' 
+			ruta='/home/' 
 			
 			filename=m.document.file_name	
 			archivo = bot.getFile(m.document.file_id)	
