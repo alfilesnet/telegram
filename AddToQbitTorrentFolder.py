@@ -25,6 +25,7 @@ bot.
 #------------------------------------------------
 # python3 -m pip install telegram --upgrade 
 # python3 -m pip install python-telegram-bot --upgrade
+# python3 -m pip install zipfile --upgrade
 #------------------------------------------------
 
 try:
@@ -33,7 +34,9 @@ try:
 	from telegram import (InlineQueryResultArticle, ParseMode, InputTextMessageContent, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup)
 	import telegram	
 	import logging
-
+	from os import remove
+	import os
+	import zipfile
 	# Enable logging
 	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 	logger = logging.getLogger(__name__)
@@ -66,9 +69,21 @@ try:
 			m=update.message
 			
 			ruta='/home/' 
+			tmp='/zip/'
 			
 			filename=m.document.file_name	
 			archivo = bot.getFile(m.document.file_id)	
+			
+			if filename.endswith('.zip'):				
+				DownloadFile(archivo.file_path, tmp, filename)				
+				zf = zipfile.ZipFile(tmp+filename, "r")
+				for torrents in zf.namelist():
+					if os.path.dirname(torrents)=='' and torrents.endswith('.torrent'):
+						zf.extract(torrents, ruta)					
+				zf.close()		
+				remove(tmp+filename)		
+				bot.send_message(chat_id=m.chat.id, text="Se han guardado los archivos de <b>"+filename+"</b> en la carpeta", parse_mode="HTML") 			
+			
 			if filename.endswith('.torrent'):		
 				DownloadFile(archivo.file_path, ruta, filename)
 				bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido guardado en la carpeta", parse_mode="HTML") 
