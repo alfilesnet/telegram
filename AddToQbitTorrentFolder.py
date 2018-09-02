@@ -25,7 +25,6 @@ bot.
 #------------------------------------------------
 # python3 -m pip install telegram --upgrade 
 # python3 -m pip install python-telegram-bot --upgrade
-# python3 -m pip install zipfile --upgrade
 #------------------------------------------------
 
 try:
