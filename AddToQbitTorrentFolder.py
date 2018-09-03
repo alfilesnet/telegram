@@ -99,15 +99,14 @@ try:
 					if os.path.dirname(torrents)=='' and torrents.endswith('.torrent'):
 						zf.extract(torrents, ruta)					
 				zf.close()		
+				rename_files()
 				remove(tmp+filename)		
 				bot.send_message(chat_id=m.chat.id, text="Se han guardado los archivos de <b>"+filename+"</b> en la carpeta", parse_mode="HTML") 			
 			
 			if filename.endswith('.torrent'):		
 				DownloadFile(archivo.file_path, ruta, filename)
 				bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido guardado en la carpeta", parse_mode="HTML") 
-
-		rename_files()
-
+			
 		except Exception as e:
 			print (e)
 
