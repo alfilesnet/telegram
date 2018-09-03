@@ -35,7 +35,9 @@ try:
 	import logging
 	from os import remove
 	import os
+	from os import scandir, getcwd, rename
 	import zipfile
+	
 	# Enable logging
 	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 	logger = logging.getLogger(__name__)
@@ -57,6 +59,23 @@ try:
 		except Exception as e:
 			print (e) 
 
+	#----------------------------------------------
+	# Función para leer los archivos de un 
+	# directorio
+	#----------------------------------------------
+	def ls(ruta = getcwd()):
+		return [arch.name for arch in scandir(ruta) if arch.is_file()]
+	
+	#----------------------------------------------
+	# Función para quitar los ' ' del nombre de
+	# los archivos
+	#----------------------------------------------	
+	
+	def rename_files():
+		for archivos in ls('/home/'):
+			if archivos.startswith("'") and archivos.endswith("'"):
+				rename(archivos, archivos[1:-1])
+	
 	#----------------------------------------------
 	# Función para descargar .torrent y enviarlos 
 	# a una carpeta
@@ -86,6 +105,8 @@ try:
 			if filename.endswith('.torrent'):		
 				DownloadFile(archivo.file_path, ruta, filename)
 				bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido guardado en la carpeta", parse_mode="HTML") 
+
+		rename_files()
 
 		except Exception as e:
 			print (e)
