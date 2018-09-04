@@ -1,20 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# Simple Bot to reply to Telegram messages
-# This program is dedicated to the public domain under the CC0 license.
-"""
-This Bot uses the Updater class to handle the bot.
- 
-First, a few handler functions are defined. Then, those functions are passed to
-the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
- 
-Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
-"""
 
 #################################################
 # Código creado por https://telegram.me/alfiles #
@@ -27,10 +12,19 @@ bot.
 # pip install python-telegram-bot --upgrade -y
 # sudo apt install qbittorrent-nox -y
 
+#------------------------------------------------
+# Carpetas necesarias                           #
+#------------------------------------------------
+# Para que funcione el bot, es necesario que  
+# exista la carpeta "archivos" en la ruta donde 
+# esté el archivo AddToQbitTorrent.py
+#
+# puedes crearla así:
+# mkdir archivos
+
 #-----------------------------------------------#
 # ¿Qué hace el bot?                             #
 #-----------------------------------------------#
-
 # 1) Reenviando o arrastrando un .torrent al bot, 
 #    éste lo añadirá al qbittorrent
 #
@@ -42,6 +36,10 @@ bot.
 #
 # 4) Reenviando o escribiendo un enlace .torrent 
 #    en el bot, éste lo añadirá al qbittorrnet
+#
+# 5) Reenviando o escribiendo un archivo .zip
+#    con .torrent en su interior, lo 
+#    descomprimirá y los añadirá al qbittorrent
 
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler, InlineQueryHandler, CallbackQueryHandler)
 from telegram import (InlineQueryResultArticle, ParseMode, InputTextMessageContent, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup)
@@ -58,9 +56,17 @@ from subprocess import call
 #------------------------------------------------
 import re 
 #------------------------------------------------
-# Libería para borrar un archivo 🔽
+# Libería para borrar un archivo, mostrar los 
+# archivos de una carpeta y renombrar archivos 🔽
 #------------------------------------------------
-from os import remove
+import os
+from os import remove, scandir, getcwd, rename
+
+#------------------------------------------------
+# Libería para extraer los archivos .zip
+#------------------------------------------------
+import zipfile
+
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -68,15 +74,12 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
  
 logger = logging.getLogger(__name__)
 
-
-
 #------------------------------------------------
 # Función para descargarse un archivo de 
 # internet
 #------------------------------------------------
 def DownloadFile(url, filename):
-	try:
-		# local_filename = url.split('/')[-1]
+	try:		
 		import urllib.request
 		opener = urllib.request.build_opener()
 		opener.addheaders = [('User-agent', 'Mozilla/5.0')]
@@ -102,7 +105,7 @@ def capturar_texto(bot, update):
 
 	if texto.endswith('.torrent') and texto.startswith('http'):
 		call(['qbittorrent-nox', texto])
-		bot.send_message(chat_id=m.chat.id, text="Se ha enviado el magnet a qbittorrent", parse_mode="HTML") 
+		bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets a qbittorrent", parse_mode="HTML") 
 	else:
 		try:
 			matches = re.finditer(regex, texto)
@@ -114,9 +117,7 @@ def capturar_texto(bot, update):
 				bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets a qbittorrent", parse_mode="HTML") 
 		except Exception as e:
 			print (e)
-			# pass
-
-
+			
 #------------------------------------------------
 # Función para descargar archivos y enviarlos a
 # qbittorrent
@@ -129,19 +130,22 @@ def capturar_texto(bot, update):
 # forma individual
 #
 # Si no es un .torrent o un .txt, no hace nada
+#
+# Si es un .zip, extrae solo los archivos 
+# .torrent y los agrega al qbittorrent
 #------------------------------------------------
 
 def descargar_archivos(bot, update):
 
 	try:
 		m=update.message		
-		filename=m.document.file_name	
+		filename=m.document.file_name		
 		archivo = bot.getFile(m.document.file_id)	
 		DownloadFile(archivo.file_path, filename)
 
 		if filename.endswith('.torrent'):		
 			call(['qbittorrent-nox', filename])
-			bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido al qbittorrent con exito", parse_mode="HTML") 
+			bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido al qbittorrent con exito", parse_mode="HTML") 	
 
 		if filename.endswith('.txt'):
 			regex = r"magnet:\?xt=urn:btih:(.+?)&dn=[\w\W]+?.torrent"
@@ -149,41 +153,39 @@ def descargar_archivos(bot, update):
 			matches = re.finditer(regex, test_str)
 			for lista in matches:	
 				call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(lista.group(1))])
-			bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets de <b>"+filename+"</b> a qbittorrent", parse_mode="HTML") 
-	except:
-		pass
+			bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets de <b>"+filename+"</b> a qbittorrent", parse_mode="HTML") 	
 
-	remove(filename)
-	
+		if filename.endswith('.zip'):				
+			DownloadFile(archivo.file_path, filename)				
+			zf = zipfile.ZipFile(filename, "r")
+			for torrents in zf.namelist():
+				if os.path.dirname(torrents)=='' and torrents.endswith('.torrent'):
+					zf.extract(torrents, 'archivos/')					
+					call(['qbittorrent-nox', 'archivos/'+torrents])					
+					remove('archivos/'+torrents)
+			zf.close()					
+			
+			bot.send_message(chat_id=m.chat.id, text="Se han guardado los archivos de <b>"+filename+"</b> en la carpeta", parse_mode="HTML")
+
+		remove(filename)		
+
+	except Exception as e:
+		print (e)
 
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
  
  
 def main():
-    # Create the EventHandler and pass it your bot's token.
-
-    updater = Updater("ESCRIBE AQUI TU TOKEN")
+    updater = Updater("Escribe aquí tu token")
     dp = updater.dispatcher
     
     dp.add_handler(MessageHandler(Filters.document, descargar_archivos)) 
     dp.add_handler(MessageHandler(Filters.text, capturar_texto))
-    # Get the dispatcher to register handlers
-    
-     
- 
-    # log all errors
     dp.add_error_handler(error)
- 
-    # Start the Bot
     updater.start_polling(clean=True)
- 
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
- 
+    updater.idle() 
  
 if __name__ == '__main__':
     main()
-   
+  
