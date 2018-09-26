@@ -31,15 +31,23 @@ def get_html(query):
 		'Cache-Control': 'no-cache',
 	}
 
-	params = (
+	params1 = (
 		('query', query),
-		('sort', seeders),
+		('sort', 'seeders'),
+		('page', '1'),
 	)
 
-	response = requests.get('https://www.skytorrents.lol/', headers=headers, params=params, cookies=cookies)
-	return sin_tildes(response.text)
+	params2 = (
+		('query', query),
+		('sort', 'seeders'),
+		('page', '2'),
+	)
 
-
+	response = requests.get('https://www.skytorrents.lol/', headers=headers, params=params1, cookies=cookies)
+	html=sin_tildes(response.text)
+	response = requests.get('https://www.skytorrents.lol/', headers=headers, params=params2, cookies=cookies)
+	html+=sin_tildes(response.text)	
+	return sin_tildes(html)
 
 def buscar_magnets(set_query):
 	html=get_html(set_query.replace(' ','+'))
@@ -57,24 +65,25 @@ def buscar_magnets(set_query):
 		try:
 			seeder=match.group(6)	
 		except:
-			seeder=''
+			seeder='0'
 
 		try:
 			leecher=match.group(7)	
 		except:
-			leecher=''
+			leecher='0'
 				
-		array[0].append(title)
-		array[1].append(magnet)
-		array[2].append(size)
-		array[3].append('Seeders: '+str(seeder))
-		array[4].append('Leecher: '+str(leecher))
+		if int(seeder)>0:				
+			array[0].append(title)
+			array[1].append(magnet)
+			array[2].append(size)
+			array[3].append('Seeders: '+str(seeder))
+			array[4].append('Leecher: '+str(leecher))
 	return array
 
 def inline(bot, update):	
 
 	contenidos=buscar_magnets(update.inline_query.query)
-	resultados=[]	
+	resultados=[]
 	try:
 		for e,contenido in enumerate(contenidos[0]):
 			salida=''
@@ -86,24 +95,20 @@ def inline(bot, update):
 			desc=contenidos[3][e]+'\n'+contenidos[4][e]
 			resultados.append(InlineQueryResultArticle(id=uuid4(), title=str(contenidos[0][e]), input_message_content=InputTextMessageContent(salida, parse_mode="HTML"), reply_markup=None, description=desc))
 			salida=''	
-
-		update.inline_query.answer(resultados, cache_time=1)		
-	
+		update.inline_query.answer(resultados, cache_time=1)			
 	except Exception as e:
 		bot.send_message(update.inline_query.from_user.id, 'Falló, vuelva a buscar')
 
-
-
 def main():
-    try:
-        updater = Updater("ESCRIBE AQUÍ TU TOKEN")
-        dp = updater.dispatcher               
-        dp.add_handler(InlineQueryHandler(inline))
-        dp.add_error_handler(error)
-        updater.start_polling(clean=True)
-        updater.idle()
-    except Exception as e:
-        print (e)
+	try:
+		updater = Updater("ESCRIBE AQUÍ TU TOKEN")
+		dp = updater.dispatcher                
+		dp.add_handler(InlineQueryHandler(inline))
+		dp.add_error_handler(error)
+		updater.start_polling(clean=True)
+		updater.idle()
+	except Exception as e:
+		print (e)
 
 if __name__ == '__main__':
-    main()
+	main()
