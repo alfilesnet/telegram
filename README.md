@@ -9,7 +9,7 @@ https://telegra.ph/C%C3%B3mo-crear-un-bot-con-botfather-09-26
 A continuación haré un pequeño resumen de los scripts subidos
 
 BuscaTorrentsInline.py:
-Busca contenido en https://www.skytorrents.lol/ y muestra los resultados de la búsqueda en el bot de forma inline. Mostrará primero el que más semillas (seeders) tenga.
+Busca contenido en https://www.skytorrents.lol/ y muestra los resultados de la búsqueda en el bot de forma inline. Mostrará primero el que más semillas (seeders) tenga. Le he añadido que busque en las dos primeras páginas y que si el magnet no tiene semillas, que no lo muestre en el inline
 
 AddToQbitTorrent.py:
 Cuando añades un .torrent/magnet/.txt con magnets/.zip con torrents añade el contenido a qbittorrent. 
