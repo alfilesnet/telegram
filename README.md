@@ -17,7 +17,7 @@ En el último caso, descomprime el .zip y añade los torrents.
 Todos los archivos añadidos a telegram en cualquier modalidad se borran al añadirse a qbittorrent
 
 AddToQbitTorrentFolder.py:
-Cuando añades un .torrent/.zip con .torrrent en su interior, estos se guardan localmente en una carpeta para que pueda ser leidapor un programa, por ejemplo el DownloadStation
+Cuando añades un .torrent/.zip con .torrrent en su interior, estos se guardan localmente en una carpeta para que pueda ser leida por un programa, por ejemplo el DownloadStation
 
 smartplug.py:
 El bot crea un botón con el que puedes controlar el estado del enfuche con wifi TP-Link HS100, en otras palabras, podrás encenderlo y apagarlo desde telegram
