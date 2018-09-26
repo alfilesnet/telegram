@@ -84,17 +84,21 @@ def inline(bot, update):
 
 	contenidos=buscar_magnets(update.inline_query.query)
 	resultados=[]
-	try:
-		for e,contenido in enumerate(contenidos[0]):
-			salida=''
-			salida+=('<b>'+contenidos[0][e]+'</b>\n\n')
-			salida+=('<b>'+contenidos[1][e]+'</b>\n\n')
-			salida+=('<b>'+contenidos[2][e]+'</b>\n')
-			salida+=('<b>'+contenidos[3][e]+'</b>\n')
-			salida+=('<b>'+contenidos[4][e]+'</b>\n')							
-			desc=contenidos[3][e]+'\n'+contenidos[4][e]
-			resultados.append(InlineQueryResultArticle(id=uuid4(), title=str(contenidos[0][e]), input_message_content=InputTextMessageContent(salida, parse_mode="HTML"), reply_markup=None, description=desc))
-			salida=''	
+	try:		
+		if len(contenidos[0])>0:
+			for e,contenido in enumerate(contenidos[0]):
+				salida=''
+				salida+=('<b>'+contenidos[0][e]+'</b>\n\n')
+				salida+=('<b>'+contenidos[1][e]+'</b>\n\n')
+				salida+=('<b>'+contenidos[2][e]+'</b>\n')
+				salida+=('<b>'+contenidos[3][e]+'</b>\n')
+				salida+=('<b>'+contenidos[4][e]+'</b>\n')							
+				desc=contenidos[3][e]+'\n'+contenidos[4][e]
+				resultados.append(InlineQueryResultArticle(id=uuid4(), title=str(contenidos[0][e]), input_message_content=InputTextMessageContent(salida, parse_mode="HTML"), reply_markup=None, description=desc))
+				salida=''
+		else:
+			resultados.append(InlineQueryResultArticle(id=uuid4(), title='Busca por otro nombre', input_message_content=InputTextMessageContent('Busca por otro nombre', parse_mode="HTML"), reply_markup=None))
+
 		update.inline_query.answer(resultados, cache_time=1)			
 	except Exception as e:
 		bot.send_message(update.inline_query.from_user.id, 'Falló, vuelva a buscar')
