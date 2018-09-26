@@ -33,6 +33,7 @@ def get_html(query):
 
 	params = (
 		('query', query),
+		('sort', seeders),
 	)
 
 	response = requests.get('https://www.skytorrents.lol/', headers=headers, params=params, cookies=cookies)
