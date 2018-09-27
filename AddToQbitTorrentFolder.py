@@ -71,8 +71,8 @@ try:
 	# los archivos
 	#----------------------------------------------	
 	
-	def rename_files():
-		for archivos in ls('/home/'):
+	def rename_files(ruta):
+		for archivos in ls(ruta):
 			if archivos.startswith("'") and archivos.endswith("'"):
 				rename(archivos, archivos[1:-1])
 	
