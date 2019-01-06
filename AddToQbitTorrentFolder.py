@@ -133,7 +133,7 @@ try:
 	def main():
 	    # Create the EventHandler and pass it your bot's token.
 
-		updater = Updater("536206209:AAF5V_PMqtZICPs4mC7Gm-JMuKFBmpgujmc")
+		updater = Updater("Introduce aquí tu token")
 		dp = updater.dispatcher
 	    
 		dp.add_handler(MessageHandler(Filters.document, descargar_archivos)) 
