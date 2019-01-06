@@ -42,7 +42,19 @@ try:
 	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 	logger = logging.getLogger(__name__)
 
+	#----------------------------------------------
+	# Indicamos cuales son los usuarios que pueden
+	# utilizar nuestro bot
+	#----------------------------------------------	
 
+	usuarios_permitidos={
+		# Los números de la izquierda son las ID's de los usuarios que quieres que puedan utilizar el bot
+		# Si quieres ser solo tú, deja 1 con tu ID y la descripción
+		4118512 : 'Propietario del bot',
+		2318561258 : 'Amigo del propietario',
+		#3123123234: 'Compañero de piso', #<-- Si no te interesa alguno, puedes borrar la linea o comentarla con un #
+		41231221561 : 'Amigo del amigo del propietario', #Importante poner siempre las comas, aunque sea la última línea
+	}
 
 	#----------------------------------------------
 	# Función para descargarse un archivo de 
@@ -83,30 +95,33 @@ try:
 
 	def descargar_archivos(bot, update):
 
-		try:
+		try:			
 			m=update.message
 			
-			ruta='/home/' 
-			tmp='/zip/'
+			if int(m.chat.id) in usuarios_permitidos:
 			
-			filename=m.document.file_name	
-			archivo = bot.getFile(m.document.file_id)	
-			
-			if filename.endswith('.zip'):				
-				DownloadFile(archivo.file_path, tmp, filename)				
-				zf = zipfile.ZipFile(tmp+filename, "r")
-				for torrents in zf.namelist():
-					if os.path.dirname(torrents)=='' and torrents.endswith('.torrent'):
-						zf.extract(torrents, ruta)					
-				zf.close()		
-				rename_files()
-				remove(tmp+filename)		
-				bot.send_message(chat_id=m.chat.id, text="Se han guardado los archivos de <b>"+filename+"</b> en la carpeta", parse_mode="HTML") 			
-			
-			if filename.endswith('.torrent'):		
-				DownloadFile(archivo.file_path, ruta, filename)
-				bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido guardado en la carpeta", parse_mode="HTML") 
-			
+				ruta='/home/' 
+				tmp='/zip/'
+
+				filename=m.document.file_name	
+				archivo = bot.getFile(m.document.file_id)	
+
+				if filename.endswith('.zip'):				
+					DownloadFile(archivo.file_path, tmp, filename)				
+					zf = zipfile.ZipFile(tmp+filename, "r")
+					for torrents in zf.namelist():
+						if os.path.dirname(torrents)=='' and torrents.endswith('.torrent'):
+							zf.extract(torrents, ruta)					
+					zf.close()		
+					rename_files()
+					remove(tmp+filename)		
+					bot.send_message(chat_id=m.chat.id, text="Se han guardado los archivos de <b>"+filename+"</b> en la carpeta", parse_mode="HTML") 			
+
+				if filename.endswith('.torrent'):		
+					DownloadFile(archivo.file_path, ruta, filename)
+					bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido guardado en la carpeta", parse_mode="HTML") 
+			else:
+				bot.send_message(chat_id=m.chat.id, text="No tienes permisos suficientes para utilizar el bot", parse_mode="HTML") 
 		except Exception as e:
 			print (e)
 
