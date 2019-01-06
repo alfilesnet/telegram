@@ -43,20 +43,6 @@ try:
 	logger = logging.getLogger(__name__)
 
 	#----------------------------------------------
-	# Indicamos cuales son los usuarios que pueden
-	# utilizar nuestro bot
-	#----------------------------------------------	
-
-	usuarios_permitidos={
-		# Los números de la izquierda son las ID's de los usuarios que quieres que puedan utilizar el bot
-		# Si quieres ser solo tú, deja 1 con tu ID y la descripción
-		4118512 : 'Propietario del bot',
-		2318561258 : 'Amigo del propietario',
-		#3123123234: 'Compañero de piso', #<-- Si no te interesa alguno, puedes borrar la linea o comentarla con un #
-		41231221561 : 'Amigo del amigo del propietario', #Importante poner siempre las comas, aunque sea la última línea
-	}
-
-	#----------------------------------------------
 	# Función para descargarse un archivo de 
 	# internet
 	#----------------------------------------------
@@ -93,9 +79,24 @@ try:
 	# a una carpeta
 	#----------------------------------------------
 
-	def descargar_archivos(bot, update):
+	def descargar_archivos(bot, update, usuarios_permitidos):
 
 		try:			
+			
+		#----------------------------------------------
+		# Indicamos cuales son los usuarios que pueden
+		# utilizar nuestro bot
+		#----------------------------------------------	
+
+		usuarios_permitidos={
+			# Los números de la izquierda son las ID's de los usuarios que quieres que puedan utilizar el bot
+			# Si quieres ser solo tú, deja 1 con tu ID y la descripción
+			4118512 : 'Propietario del bot',
+			2318561258 : 'Amigo del propietario',
+			#3123123234: 'Compañero de piso', #<-- Si no te interesa alguno, puedes borrar la linea o comentarla con un #
+			41231221561 : 'Amigo del amigo del propietario', #Importante poner siempre las comas, aunque sea la última línea
+		}			
+			
 			m=update.message
 			
 			if int(m.chat.id) in usuarios_permitidos:
