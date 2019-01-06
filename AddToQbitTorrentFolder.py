@@ -79,34 +79,32 @@ try:
 	# a una carpeta
 	#----------------------------------------------
 
-	def descargar_archivos(bot, update, usuarios_permitidos):
+	def descargar_archivos(bot, update):
 
-		try:			
-			
 		#----------------------------------------------
 		# Indicamos cuales son los usuarios que pueden
 		# utilizar nuestro bot
 		#----------------------------------------------	
-
 		usuarios_permitidos={
 			# Los números de la izquierda son las ID's de los usuarios que quieres que puedan utilizar el bot
 			# Si quieres ser solo tú, deja 1 con tu ID y la descripción
-			4118512 : 'Propietario del bot',
-			2318561258 : 'Amigo del propietario',
+			123456789 : 'Propietario del bot',
+			987654321 : 'Amigo del propietario',
 			#3123123234: 'Compañero de piso', #<-- Si no te interesa alguno, puedes borrar la linea o comentarla con un #
-			41231221561 : 'Amigo del amigo del propietario', #Importante poner siempre las comas, aunque sea la última línea
-		}			
-			
+			#41231221561 : 'Amigo del amigo del propietario', #Importante poner siempre las comas, aunque sea la última línea
+		}
+
+		try:
 			m=update.message
-			
-			if int(m.chat.id) in usuarios_permitidos:
-			
+
+			if int(m.chat.id) in usuarios_permitidos:			
+
 				ruta='/home/' 
 				tmp='/zip/'
-
+				
 				filename=m.document.file_name	
 				archivo = bot.getFile(m.document.file_id)	
-
+				
 				if filename.endswith('.zip'):				
 					DownloadFile(archivo.file_path, tmp, filename)				
 					zf = zipfile.ZipFile(tmp+filename, "r")
@@ -117,12 +115,14 @@ try:
 					rename_files()
 					remove(tmp+filename)		
 					bot.send_message(chat_id=m.chat.id, text="Se han guardado los archivos de <b>"+filename+"</b> en la carpeta", parse_mode="HTML") 			
-
+				
 				if filename.endswith('.torrent'):		
 					DownloadFile(archivo.file_path, ruta, filename)
 					bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido guardado en la carpeta", parse_mode="HTML") 
+				
 			else:
 				bot.send_message(chat_id=m.chat.id, text="No tienes permisos suficientes para utilizar el bot", parse_mode="HTML") 
+				
 		except Exception as e:
 			print (e)
 
@@ -133,7 +133,7 @@ try:
 	def main():
 	    # Create the EventHandler and pass it your bot's token.
 
-		updater = Updater("Escribe aquí tu token")
+		updater = Updater("536206209:AAF5V_PMqtZICPs4mC7Gm-JMuKFBmpgujmc")
 		dp = updater.dispatcher
 	    
 		dp.add_handler(MessageHandler(Filters.document, descargar_archivos)) 
@@ -157,3 +157,6 @@ try:
 		main()
 except Exception as e:
 	print (e)		
+	
+	
+	
