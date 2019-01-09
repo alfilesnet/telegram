@@ -136,18 +136,15 @@ def procesar_texto(bot, update):
 
 
 def main():
-	try:        	
-		updater = Updater("Escribe aquí tu token")
-		dp = updater.dispatcher     
-		dp.add_handler(MessageHandler(Filters.text, procesar_texto))
-		# dp.add_handler(CommandHandler("start", start))
-		# dp.add_handler(InlineQueryHandler(inline))    
-		# dp.add_handler(CallbackQueryHandler(button))
-		dp.add_error_handler(error)
-		updater.start_polling(clean=True)
-		updater.idle()
-	except Exception as e:
-		print (e)
+	updater = Updater("Escribe aquí tu token")
+	dp = updater.dispatcher     
+	dp.add_handler(MessageHandler(Filters.text, procesar_texto))
+	# dp.add_handler(CommandHandler("start", start))
+	# dp.add_handler(InlineQueryHandler(inline))    
+	# dp.add_handler(CallbackQueryHandler(button))
+	dp.add_error_handler(error)
+	updater.start_polling(clean=True)
+	updater.idle()
 
 if __name__ == '__main__':
     main()
