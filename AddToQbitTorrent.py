@@ -79,14 +79,11 @@ logger = logging.getLogger(__name__)
 # internet
 #------------------------------------------------
 def DownloadFile(url, filename):
-	try:		
-		import urllib.request
-		opener = urllib.request.build_opener()
-		opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-		urllib.request.install_opener(opener)
-		urllib.request.urlretrieve(url, './'+filename)
-	except Exception as e:
-		print (e) 
+	import urllib.request
+	opener = urllib.request.build_opener()
+	opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+	urllib.request.install_opener(opener)
+	urllib.request.urlretrieve(url, './'+filename)
 
 #------------------------------------------------
 # Función para capturar el texto que se le 
@@ -107,17 +104,14 @@ def capturar_texto(bot, update):
 		call(['qbittorrent-nox', texto])
 		bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets a qbittorrent", parse_mode="HTML") 
 	else:
-		try:
-			matches = re.finditer(regex, texto)
-			for magnet in matches:
-				if magnet.group(1)!='':
-					call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(magnet.group(1))+'.torrent'])
-					count+=1
-			if count>0:
-				bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets a qbittorrent", parse_mode="HTML") 
-		except Exception as e:
-			print (e)
-			
+		matches = re.finditer(regex, texto)
+		for magnet in matches:
+			if magnet.group(1)!='':
+				call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(magnet.group(1))+'.torrent'])
+				count+=1
+		if count>0:
+			bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets a qbittorrent", parse_mode="HTML") 
+
 #------------------------------------------------
 # Función para descargar archivos y enviarlos a
 # qbittorrent
@@ -137,40 +131,36 @@ def capturar_texto(bot, update):
 
 def descargar_archivos(bot, update):
 
-	try:
-		m=update.message		
-		filename=m.document.file_name		
-		archivo = bot.getFile(m.document.file_id)	
-		DownloadFile(archivo.file_path, filename)
+	m=update.message		
+	filename=m.document.file_name		
+	archivo = bot.getFile(m.document.file_id)	
+	DownloadFile(archivo.file_path, filename)
 
-		if filename.endswith('.torrent'):		
-			call(['qbittorrent-nox', filename])
-			bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido al qbittorrent con exito", parse_mode="HTML") 	
+	if filename.endswith('.torrent'):		
+		call(['qbittorrent-nox', filename])
+		bot.send_message(chat_id=m.chat.id, text="El archivo <b>"+filename+"</b> se ha añadido al qbittorrent con exito", parse_mode="HTML") 	
 
-		if filename.endswith('.txt'):
-			regex = r"magnet:\?xt=urn:btih:(.+?)&dn=[\w\W]+?.torrent"
-			test_str=open(filename, 'r').read()
-			matches = re.finditer(regex, test_str)
-			for lista in matches:	
-				call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(lista.group(1))])
-			bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets de <b>"+filename+"</b> a qbittorrent", parse_mode="HTML") 	
+	if filename.endswith('.txt'):
+		regex = r"magnet:\?xt=urn:btih:(.+?)&dn=[\w\W]+?.torrent"
+		test_str=open(filename, 'r').read()
+		matches = re.finditer(regex, test_str)
+		for lista in matches:	
+			call(['qbittorrent-nox', 'magnet:?xt=urn:btih:'+str(lista.group(1))])
+		bot.send_message(chat_id=m.chat.id, text="Se han enviado todos los magnets de <b>"+filename+"</b> a qbittorrent", parse_mode="HTML") 	
 
-		if filename.endswith('.zip'):				
-			DownloadFile(archivo.file_path, filename)				
-			zf = zipfile.ZipFile(filename, "r")
-			for torrents in zf.namelist():
-				if os.path.dirname(torrents)=='' and torrents.endswith('.torrent'):
-					zf.extract(torrents, 'archivos/')					
-					call(['qbittorrent-nox', 'archivos/'+torrents])					
-					remove('archivos/'+torrents)
-			zf.close()					
-			
-			bot.send_message(chat_id=m.chat.id, text="Se han guardado los archivos de <b>"+filename+"</b> en la carpeta", parse_mode="HTML")
+	if filename.endswith('.zip'):				
+		DownloadFile(archivo.file_path, filename)				
+		zf = zipfile.ZipFile(filename, "r")
+		for torrents in zf.namelist():
+			if os.path.dirname(torrents)=='' and torrents.endswith('.torrent'):
+				zf.extract(torrents, 'archivos/')					
+				call(['qbittorrent-nox', 'archivos/'+torrents])					
+				remove('archivos/'+torrents)
+		zf.close()					
 
-		remove(filename)		
+		bot.send_message(chat_id=m.chat.id, text="Se han guardado los archivos de <b>"+filename+"</b> en la carpeta", parse_mode="HTML")
 
-	except Exception as e:
-		print (e)
+	remove(filename)		
 
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
