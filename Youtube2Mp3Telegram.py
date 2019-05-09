@@ -11,7 +11,7 @@ def sin_tildes(s):
 	import unicodedata
 	return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))  
 
-def descargar_mp3(bot, update, chat_id, mid, id_video):
+def descargar_mp3(bot, update, chat_id, mid, url_video):
 
 	class MyLogger(object):
 		def debug(self, msg):
@@ -41,9 +41,8 @@ def descargar_mp3(bot, update, chat_id, mid, id_video):
 		'progress_hooks': [my_hook],
 	}
 
-	with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-		uri='https://www.youtube.com/watch?v='+id_video
-		info = ydl.extract_info(uri, download=True)
+	with youtube_dl.YoutubeDL(ydl_opts) as ydl:		
+		info = ydl.extract_info(url_video, download=True)
 		archivo = ydl.prepare_filename(info)
 		archivo=archivo.replace('webm', 'mp3').replace('wav', 'mp3').replace('ogg', 'mp3').replace('m4a', 'mp3')
 		archivop=sin_tildes(archivo).replace('|', '').replace('¡', '').replace('!', '').replace('?', '').replace('¿', '').replace('\'', '')
@@ -54,11 +53,9 @@ def descargar_mp3(bot, update, chat_id, mid, id_video):
 
 def capturando_enlaces_de_yt(bot, update):
 	try:
-		m=update.message		
-		regex = r"https://www\.youtube\.com/watch\?v=(.+)"
-		yt_id = re.search(regex, m.text.replace('&feature=share', '')).group(1)
+		m=update.message				
 		aviso=bot.send_message(m.chat.id, 'Descargando video...')
-		filename=descargar_mp3(bot, update, m.chat.id, aviso.message_id, yt_id)
+		filename=descargar_mp3(bot, update, m.chat.id, aviso.message_id, m.text)
 		bot.send_document(m.chat.id, open('audios/'+sin_tildes(filename), 'rb'), caption=filename[:-4])
 		bot.delete_message(m.chat.id, aviso.message_id)
 		bot.delete_message(m.chat.id, m.message_id)
