@@ -34,6 +34,9 @@ Este bot tiene 2 funciones:
 Youtube2Mp3Telegram.py:
 Una vez introducido un enlace de youtube, el bot descargará video, extraerá el audio en 192khz y lo enviará a telegram, borrando después el vídeo.
 
+Youtube2Mp3InlineTelegram.py:
+Igual que el anterior más un buscador inline de youtube
+
 
 Si quieres apoyar para que siga desarrollando, te dejo mi paypal: 
 alfiles@gmail.com
