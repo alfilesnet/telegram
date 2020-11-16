@@ -25,6 +25,7 @@ bot.
 #------------------------------------------------
 # python3 -m pip install telegram --upgrade 
 # python3 -m pip install python-telegram-bot --upgrade
+# python3 -m pip uninstall python-telegram-bot;python3 -m pip install python-telegram-bot==11.1.0
 #------------------------------------------------
 
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler, InlineQueryHandler, CallbackQueryHandler)
